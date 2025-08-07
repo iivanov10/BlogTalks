@@ -1,34 +1,33 @@
-﻿using BlogTalks.Domain.DTOs;
+﻿using BlogTalks.Domain.Repositories;
 using MediatR;
 
 namespace BlogTalks.Application.BlogPost.Queries
 {
     public class GetByIdHandler : IRequestHandler<GetByIdRequest, GetByIdResponse>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly IBlogPostRepository _blogPostRepository;
 
-        public GetByIdHandler(FakeDataStore fakeDataStore)
+        public GetByIdHandler(IBlogPostRepository blogPostRepository)
         {
-            _fakeDataStore = fakeDataStore;
+            _blogPostRepository = blogPostRepository;
         }
-        
-        public async Task<GetByIdResponse> Handle(GetByIdRequest request, CancellationToken cancellationToken)
+
+        public Task<GetByIdResponse> Handle(GetByIdRequest request, CancellationToken cancellationToken)
         {
-            var blogPost = await _fakeDataStore.GetBlogPostById(request.Id);
+            var blogPost = _blogPostRepository.GetById(request.Id);
             if (blogPost == null)
             {
                 return null;
             }
-            return new GetByIdResponse
+
+            return Task.FromResult(new GetByIdResponse
             {
-                Id = blogPost.Id,
                 Title = blogPost.Title,
                 Text = blogPost.Text,
                 CreatedBy = blogPost.CreatedBy,
-                Timestamp = blogPost.Timestamp,
+                Timestamp = blogPost.CreatedAt,
                 Tags = blogPost.Tags,
-                Comments = blogPost.Comments
-            };
+            });
         }
     }
 }

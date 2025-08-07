@@ -1,21 +1,17 @@
 ﻿using BlogTalks.Domain.Shared;
-using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogTalks.Domain.Entities
 {
-    public class BlogPost : BaseEntity
+    public class BlogPost : IEntity
     {
-        public required string Title { get; set; }
-        public required string Text { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
         public int CreatedBy { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime CreatedAt { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
+
+        // Navigation
         public List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

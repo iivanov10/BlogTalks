@@ -1,36 +1,30 @@
-﻿using BlogTalks.Domain.DTOs;
+﻿using BlogTalks.Domain.Repositories;
 using MediatR;
 
 namespace BlogTalks.Application.Comment.Commands
 {
     public class UpdateByIdHandler : IRequestHandler<UpdateByIdRequest, UpdateByIdResponse>
     {
-        private readonly FakeDataStore _fakeDataStore;
-        public UpdateByIdHandler(FakeDataStore fakeDataStore)
+        private readonly ICommentRepository _commentRepository;
+
+        public UpdateByIdHandler(ICommentRepository commentRepository)
         {
-            _fakeDataStore = fakeDataStore;
+            _commentRepository = commentRepository;
         }
 
-        public async Task<UpdateByIdResponse> Handle(UpdateByIdRequest request, CancellationToken cancellationToken)
+        public Task<UpdateByIdResponse> Handle(UpdateByIdRequest request, CancellationToken cancellationToken)
         {
-            var comment = _fakeDataStore.GetCommentById(request.Id);
+            var comment = _commentRepository.GetById(request.Id);
             if (comment == null)
             {
                 return null;
             }
 
-            var commentDTO = new CommentDTO
-            {
-                Id = request.Id,
-                Text = request.Text,
-                BlogPostId = request.BlogPostId,
-                CreatedBy = request.CreatedBy,
-                CreatedAt = request.CreatedAt,
-            };
+            comment.Text = request.Text;
 
-            await _fakeDataStore.UpdateComment(comment.Result.Id, commentDTO);
+            _commentRepository.Update(comment);
 
-            return new UpdateByIdResponse();
+            return Task.FromResult(new UpdateByIdResponse());
         }
     }
 }

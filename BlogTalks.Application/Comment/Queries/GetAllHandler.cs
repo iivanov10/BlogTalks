@@ -1,20 +1,20 @@
 ﻿using MediatR;
-using BlogTalks.Domain.DTOs;
+using BlogTalks.Domain.Repositories;
 
 namespace BlogTalks.Application.Comment.Queries
 {
     public class GetAllHandler : IRequestHandler<GetAllRequest, IEnumerable<GetAllResponse>>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly ICommentRepository _commentRepository;
 
-        public GetAllHandler(FakeDataStore fakeDataStore)
+        public GetAllHandler(ICommentRepository commentRepository)
         {
-            _fakeDataStore = fakeDataStore;
+            _commentRepository = commentRepository;
         }
 
-        public async Task<IEnumerable<GetAllResponse>> Handle(GetAllRequest request, CancellationToken cancellationToken)
+        public Task<IEnumerable<GetAllResponse>> Handle(GetAllRequest request, CancellationToken cancellationToken)
         {
-            var comments = await _fakeDataStore.GetAllComments();
+            var comments = _commentRepository.GetAll();
 
             var response = comments.Select(c => new GetAllResponse
             {
@@ -25,7 +25,7 @@ namespace BlogTalks.Application.Comment.Queries
                 BlogPostId = c.BlogPostId,
             });
 
-            return response;
+            return Task.FromResult(response);
         }
     }
 }

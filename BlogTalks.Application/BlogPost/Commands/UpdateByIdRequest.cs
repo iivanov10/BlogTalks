@@ -1,13 +1,12 @@
 ﻿using BlogTalks.Domain.DTOs;
 using MediatR;
+using System.Text.Json.Serialization;
 
 namespace BlogTalks.Application.BlogPost.Commands
 {
-    public record UpdateByIdRequest(int Id,
+    public record UpdateByIdRequest([property: JsonIgnore] int Id,
         string Title,
         string Text,
-        int CreatedBy,
-        DateTime Timestamp,
-        List<string> Tags,
-        List<CommentDTO> Comments) : IRequest<UpdateByIdResponse>;
+        List<string> Tags) : IRequest<UpdateByIdResponse>;
+
 }
