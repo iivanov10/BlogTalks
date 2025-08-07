@@ -44,14 +44,14 @@ namespace BlogTalks.API.Controllers
         public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
             var comment = await _mediator.Send(request);
-            return CreatedAtAction(nameof(Get), new { id = comment.Id }, comment);
+            return Ok(comment.Id);
         }
 
         // PUT api/<CommentsController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
-        {   // id in the request should be the same as the one in the path, not the one entered in the body
-            var comment = await _mediator.Send(new UpdateByIdRequest(id, request.Text, request.CreatedAt, request.CreatedBy, request.BlogPostId));
+        {
+            var comment = await _mediator.Send(new UpdateByIdRequest(id, request.Text));
             if (comment == null)
             {
                 return BadRequest();
@@ -82,6 +82,7 @@ namespace BlogTalks.API.Controllers
             {
                 return NotFound();
             }
+
             return Ok(comments);
         }
     }

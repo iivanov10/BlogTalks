@@ -1,5 +1,6 @@
-using BlogTalks.Application.Comment.Queries;
-using BlogTalks.Domain.DTOs;
+using BlogTalks.API;
+using BlogTalks.Application;
+using BlogTalks.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,13 +14,10 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => type.FullName);
 });
 
-builder.Services.AddMediatR(cfg =>
-{
-    // check later
-    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(GetAllResponse).Assembly);
-});
-builder.Services.AddSingleton<FakeDataStore>();
+builder.Services
+    .AddPresentation()
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

@@ -1,6 +1,9 @@
 ﻿using MediatR;
+using System.Text.Json.Serialization;
 
 namespace BlogTalks.Application.Comment.Commands
 {
-    public record UpdateByIdRequest(int Id, string Text, DateTime CreatedAt, int CreatedBy, int BlogPostId) : IRequest<UpdateByIdResponse>;
+    public record UpdateByIdRequest(
+        [property: JsonIgnore] int Id,
+        string Text) : IRequest<UpdateByIdResponse>;
 }

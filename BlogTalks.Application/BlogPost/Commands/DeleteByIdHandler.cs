@@ -1,23 +1,23 @@
-﻿using BlogTalks.Domain.DTOs;
+﻿using BlogTalks.Domain.Repositories;
 using MediatR;
 
 namespace BlogTalks.Application.BlogPost.Commands
 {
     public class DeleteByIdHandler : IRequestHandler<DeleteByIdRequest, DeleteByIdResponse>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly IBlogPostRepository _blogPostRepository;
 
-        public DeleteByIdHandler(FakeDataStore fakeDataStore)
+        public DeleteByIdHandler(IBlogPostRepository blogPostRepository)
         {
-            _fakeDataStore = fakeDataStore;
+            _blogPostRepository = blogPostRepository;
         }
 
-        public async Task<DeleteByIdResponse> Handle(DeleteByIdRequest request, CancellationToken cancellationToken)
+        public Task<DeleteByIdResponse> Handle(DeleteByIdRequest request, CancellationToken cancellationToken)
         {
-            var blogPost = _fakeDataStore.GetBlogPostById(request.Id);
-            await _fakeDataStore.DeleteBlogPost(blogPost.Result.Id);
+            var blogPost = _blogPostRepository.GetById(request.Id);
+            _blogPostRepository.Delete(blogPost);
 
-            return new DeleteByIdResponse();
+            return Task.FromResult(new DeleteByIdResponse());
         }
     }
 }

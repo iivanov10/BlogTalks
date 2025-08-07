@@ -2,12 +2,15 @@
 
 namespace BlogTalks.Domain.Entities
 {
-    public class Comment : BaseEntity
+    public class Comment : IEntity
     {
-        public required string Text { get; set; }
+        public int Id { get; set; }
+        public string Text { get; set; } = string.Empty;
         public int CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation
         public int BlogPostId { get; set; }
-        public required BlogPost BlogPost { get; set; }
+        public BlogPost BlogPost { get; set; } = new BlogPost();
     }
 }
