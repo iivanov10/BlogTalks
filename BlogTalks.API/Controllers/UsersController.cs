@@ -28,7 +28,7 @@ namespace BlogTalks.API.Controllers
         public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {
             var response = await _mediator.Send(request);
-            return Ok(new LoginResponse { Token = response.Token });
+            return Ok(response);
         }
     }
 }

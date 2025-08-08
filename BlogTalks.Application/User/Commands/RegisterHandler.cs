@@ -13,13 +13,7 @@ namespace BlogTalks.Application.User.Commands
         }
         public Task<RegisterResponse> Handle(RegisterRequest request, CancellationToken cancellationToken)
         {
-            var existingUser = _userRepository.GetByName(request.Name);
-            if (existingUser != null)
-            {
-                return Task.FromResult(new RegisterResponse { Message = "Username already exists." });
-            }
-
-            existingUser = _userRepository.GetByEmail(request.Email);
+            var existingUser = _userRepository.GetByEmail(request.Email);
             if (existingUser != null)
             {
                 return Task.FromResult(new RegisterResponse { Message = "Email already exists." });
