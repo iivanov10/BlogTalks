@@ -17,15 +17,15 @@ namespace BlogTalks.Application.User.Commands
             var user = _userRepository.GetByEmail(request.Email);
             if (user == null)
             {
-                return await Task.FromResult(new LoginResponse { Message = "User not found.", Status = false });
+                return await Task.FromResult(new LoginResponse { Message = "User not found." });
             }
 
             if (!PasswordHasher.VerifyPassword(request.Password, user.Password))
             {
-                return await Task.FromResult(new LoginResponse { Message = "Invalid password.", Status = false});
+                return await Task.FromResult(new LoginResponse { Message = "Invalid password." });
             }
 
-            return await Task.FromResult(new LoginResponse { Message = "Successful login.", Status = true, Token = "", RefreshToken = "" });
+            return await Task.FromResult(new LoginResponse { Token = "", RefreshToken = "" });
         }
     }
 }

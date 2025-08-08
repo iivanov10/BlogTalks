@@ -1,10 +1,16 @@
-﻿namespace BlogTalks.Application.User.Commands
+﻿using System.Text.Json.Serialization;
+
+namespace BlogTalks.Application.User.Commands
 {
     public class LoginResponse
     {
-        public string Token { get; set; } = string.Empty;
-        public string RefreshToken { get; set; } = string.Empty;
-        public bool Status { get; set; }
-        public string Message { get; set; } = string.Empty;
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Token { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? RefreshToken { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? Status { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Message { get; set; }
     }
 }
