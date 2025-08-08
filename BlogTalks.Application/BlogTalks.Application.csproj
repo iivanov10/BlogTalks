@@ -15,4 +15,8 @@
     <ProjectReference Include="..\BlogTalks.Domain\BlogTalks.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="User\Queries\" />
+  </ItemGroup>
+
 </Project>
