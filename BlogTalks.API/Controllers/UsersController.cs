@@ -2,6 +2,7 @@
 using BlogTalks.Domain.Entities;
 using BlogTalks.Domain.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogTalks.API.Controllers
@@ -18,6 +19,7 @@ namespace BlogTalks.API.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult> Register([FromBody] RegisterRequest request)
         {
             var response = await _mediator.Send(request);
@@ -25,6 +27,7 @@ namespace BlogTalks.API.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {
             var response = await _mediator.Send(request);

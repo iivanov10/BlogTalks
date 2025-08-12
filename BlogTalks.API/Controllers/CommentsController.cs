@@ -1,9 +1,8 @@
 ﻿using BlogTalks.Application.Comment.Commands;
 using BlogTalks.Application.Comment.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BlogTalks.API.Controllers
 {
@@ -18,16 +17,16 @@ namespace BlogTalks.API.Controllers
             _mediator = mediator;
         }
 
-        // GET api/<CommentsController>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> Get()
         {
             var comments = await _mediator.Send(new GetAllRequest());
             return Ok(comments);
         }
 
-        // GET api/<CommentsController>/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult> Get([FromRoute] int id)
         {
             var comment = await _mediator.Send(new GetByIdRequest(id));
@@ -39,16 +38,16 @@ namespace BlogTalks.API.Controllers
             return Ok(comment);
         }
 
-        // POST api/<CommentsController>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
             var comment = await _mediator.Send(request);
             return Ok(comment.Id);
         }
 
-        // PUT api/<CommentsController>/5
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
         {
             var comment = await _mediator.Send(new UpdateByIdRequest(id, request.Text));
@@ -60,8 +59,8 @@ namespace BlogTalks.API.Controllers
             return NoContent();
         }
 
-        // DELETE api/<CommentsController>/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
             var comment = await _mediator.Send(new DeleteByIdRequest(id));
@@ -73,8 +72,8 @@ namespace BlogTalks.API.Controllers
             return NoContent();
         }
 
-        // GET api/blogPosts/<CommentsController>/5/comments
         [HttpGet("/api/blogPosts/{id}/comments")]
+        [Authorize]
         public async Task<ActionResult> GetByBlogPostId([FromRoute] int id)
         {
             var comments = await _mediator.Send(new GetByBlogPostIdRequest(id));
