@@ -4,7 +4,6 @@ using BlogTalks.Infrastructure.Authentication;
 using BlogTalks.Infrastructure.Data.DataContext;
 using BlogTalks.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
