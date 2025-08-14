@@ -12,16 +12,20 @@ namespace BlogTalks.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IMediator mediator)
+        public UsersController(IMediator mediator, ILogger<UsersController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromBody] RegisterRequest request)
         {
+            _logger.LogInformation("Registering user with email: {Email}", request.Email);
+
             var response = await _mediator.Send(request);
             return Ok(response);
         }
@@ -30,6 +34,8 @@ namespace BlogTalks.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {
+            _logger.LogInformation("Logging in user with email: {Email}", request.Email);
+
             var response = await _mediator.Send(request);
             return Ok(response);
         }

@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BlogTalks.Application.User.Commands;
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogTalks.Application
 {
@@ -10,6 +13,9 @@ namespace BlogTalks.Application
             {
                 config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
             });
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 
             return services;
         }

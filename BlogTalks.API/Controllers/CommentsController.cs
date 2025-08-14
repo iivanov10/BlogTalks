@@ -11,16 +11,20 @@ namespace BlogTalks.API.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<CommentsController> _logger;
 
-        public CommentsController(IMediator mediator)
+        public CommentsController(IMediator mediator, ILogger<CommentsController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> Get()
         {
+            _logger.LogInformation("Fetching all comments.");
+
             var comments = await _mediator.Send(new GetAllRequest());
             return Ok(comments);
         }
@@ -29,12 +33,9 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Get([FromRoute] int id)
         {
-            var comment = await _mediator.Send(new GetByIdRequest(id));
-            if (comment == null)
-            {
-                return NotFound();
-            }
+            _logger.LogInformation("Fetching comment id {id}", id);
 
+            var comment = await _mediator.Send(new GetByIdRequest(id));
             return Ok(comment);
         }
 
@@ -42,6 +43,8 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Post([FromBody] CreateRequest request)
         {
+            _logger.LogInformation("Creating a comment.");
+
             var comment = await _mediator.Send(request);
             return Ok(comment.Id);
         }
@@ -50,12 +53,9 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] UpdateByIdRequest request)
         {
-            var comment = await _mediator.Send(new UpdateByIdRequest(id, request.Text));
-            if (comment == null)
-            {
-                return BadRequest();
-            }
+            _logger.LogInformation("Editing comment with id {id}.", id);
 
+            var comment = await _mediator.Send(new UpdateByIdRequest(id, request.Text));
             return NoContent();
         }
 
@@ -63,12 +63,9 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
+            _logger.LogInformation("Deleting comment with id {id}.", id);
+            
             var comment = await _mediator.Send(new DeleteByIdRequest(id));
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
             return NoContent();
         }
 
@@ -76,12 +73,9 @@ namespace BlogTalks.API.Controllers
         [Authorize]
         public async Task<ActionResult> GetByBlogPostId([FromRoute] int id)
         {
-            var comments = await _mediator.Send(new GetByBlogPostIdRequest(id));
-            if (comments == null)
-            {
-                return NotFound();
-            }
+            _logger.LogInformation("Fetching comments for BlogPost with id {id}.", id);
 
+            var comments = await _mediator.Send(new GetByBlogPostIdRequest(id));
             return Ok(comments);
         }
     }
