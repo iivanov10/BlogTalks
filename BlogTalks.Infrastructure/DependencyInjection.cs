@@ -50,6 +50,22 @@ namespace BlogTalks.Infrastructure
                         ValidAudience = jwtSettings.Audience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
                     };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                            if (!string.IsNullOrEmpty(authHeader))
+                            {
+                                if (authHeader.StartsWith("Bearer "))
+                                    context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                                else
+                                    context.Token = authHeader;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             services.AddSwaggerGen(options =>

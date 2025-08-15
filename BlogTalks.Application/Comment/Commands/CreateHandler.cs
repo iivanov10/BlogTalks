@@ -1,6 +1,7 @@
 ﻿using BlogTalks.Domain.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace BlogTalks.Application.Comment.Commands
 {
@@ -19,7 +20,7 @@ namespace BlogTalks.Application.Comment.Commands
 
         public async Task<CreateResponse> Handle(CreateRequest request, CancellationToken cancellationToken)
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             int userIdValue = 0;
             if (int.TryParse(userId, out int parsedUserId))
             {

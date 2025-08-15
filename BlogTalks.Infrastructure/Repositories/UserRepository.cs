@@ -20,5 +20,10 @@ namespace BlogTalks.Infrastructure.Repositories
         {
             return _dbSet.Where(u => u.Name == name).FirstOrDefault();
         }
+
+        public IEnumerable<User>? GetByIds(IEnumerable<int> ids)
+        {
+            return _dbSet.Where(u => ids.Contains(u.Id));
+        }
     }
 }
