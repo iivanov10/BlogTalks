@@ -1,6 +1,7 @@
 ﻿using BlogTalks.Domain.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace BlogTalks.Application.BlogPost.Commands
 {
@@ -17,7 +18,7 @@ namespace BlogTalks.Application.BlogPost.Commands
 
         public Task<CreateResponse> Handle(CreateRequest request, CancellationToken cancellationToken)
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             int userIdValue = 0;
             if (int.TryParse(userId, out int parsedUserId))
             {
@@ -29,6 +30,7 @@ namespace BlogTalks.Application.BlogPost.Commands
                 Title = request.Title,
                 Text = request.Text,
                 CreatedBy = userIdValue,
+                CreatedAt = DateTime.UtcNow,
                 Tags = request.Tags
             };
 

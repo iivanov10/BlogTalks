@@ -6,5 +6,6 @@ namespace BlogTalks.Domain.Repositories
     {
         User? GetByName(string name);
         User? GetByEmail(string email);
+        IEnumerable<User>? GetByIds(IEnumerable<int> ids);
     }
 }

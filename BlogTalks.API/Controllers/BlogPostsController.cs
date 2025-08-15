@@ -21,11 +21,11 @@ namespace BlogTalks.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Get([FromQuery]int? pageNumber, int? pageSize, string? searchWord, string? tag)
         {
-            _logger.LogInformation("Fetching all BlogPosts.");
+            _logger.LogInformation("Fetching all BlogPosts by searchWord {searchWord} with tag {tag}.", searchWord, tag);
 
-            var blogPosts = await _mediator.Send(new GetAllRequest());
+            var blogPosts = await _mediator.Send(new GetAllRequest(pageNumber ?? 1, pageSize ?? 10, searchWord, tag));
             return Ok(blogPosts);
         }
 
