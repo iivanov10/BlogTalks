@@ -1,5 +1,4 @@
-﻿using BlogTalks.Domain.DTOs;
-using MediatR;
+﻿using MediatR;
 using System.Text.Json.Serialization;
 
 namespace BlogTalks.Application.BlogPost.Commands

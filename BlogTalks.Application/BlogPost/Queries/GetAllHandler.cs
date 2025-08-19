@@ -18,15 +18,15 @@ namespace BlogTalks.Application.BlogPost.Queries
         public Task<GetAllResponse> Handle(GetAllRequest request, CancellationToken cancellationToken)
         {
             var pagedResult = _blogPostRepository.GetAll(
-                request.PageNumber,
-                request.PageSize,
+                request.PageNumber ?? 1,
+                request.PageSize ?? 10,
                 request.SearchWord,
                 request.Tag
             );
 
-            var blogPosts = pagedResult.Items;
+            var blogPosts = pagedResult?.Items;
             
-            var blogPostsModel = blogPosts.Select(bp => new BlogPostModel
+            var blogPostsModel = blogPosts?.Select(bp => new BlogPostModel
             {
                 Id = bp.Id,
                 Title = bp.Title,
@@ -34,19 +34,19 @@ namespace BlogTalks.Application.BlogPost.Queries
                 Tags = bp.Tags
             }).ToList();
 
-            var userIds = blogPosts.Select(bp => bp.CreatedBy).Distinct().ToList();
+            var userIds = blogPosts?.Select(bp => bp.CreatedBy).Distinct().ToList();
             var users = _userRepository.GetByIds(userIds);
 
             if (users != null)
             {
-                for (int i = 0; i < blogPosts.Count(); i++)
-                { 
+                for (int i = 0; i < blogPosts.Count; i++)
+                {
                     string creatorName = users.FirstOrDefault(u => u.Id == blogPosts[i].CreatedBy)?.Name ?? string.Empty;
                     blogPostsModel[i].CreatorName = creatorName;
                 }
             }
 
-            var totalCount = pagedResult.TotalCount;
+            var totalCount = pagedResult?.TotalCount ?? 0;
 
             int totalPages = 1;
             if (request.PageSize != null && request.PageSize > 0)

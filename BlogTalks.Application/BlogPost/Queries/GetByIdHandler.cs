@@ -15,17 +15,13 @@ namespace BlogTalks.Application.BlogPost.Queries
         public Task<GetByIdResponse> Handle(GetByIdRequest request, CancellationToken cancellationToken)
         {
             var blogPost = _blogPostRepository.GetById(request.Id);
-            if (blogPost == null)
-            {
-                return null;
-            }
 
             return Task.FromResult(new GetByIdResponse
             {
                 Title = blogPost.Title,
                 Text = blogPost.Text,
                 CreatedBy = blogPost.CreatedBy,
-                Timestamp = blogPost.CreatedAt,
+                CreatedAt = blogPost.CreatedAt,
                 Tags = blogPost.Tags,
             });
         }
