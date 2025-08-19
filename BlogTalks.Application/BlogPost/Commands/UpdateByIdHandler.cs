@@ -15,10 +15,6 @@ namespace BlogTalks.Application.BlogPost.Commands
         public async Task<UpdateByIdResponse> Handle(UpdateByIdRequest request, CancellationToken cancellationToken)
         {
             var blogPost = _blogPostRepository.GetById(request.Id);
-            if (blogPost == null)
-            {
-                return null;
-            }
 
             blogPost.Title = request.Title;
             blogPost.Text = request.Text;

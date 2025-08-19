@@ -1,6 +1,4 @@
 ﻿using BlogTalks.Application.User.Commands;
-using BlogTalks.Domain.Entities;
-using BlogTalks.Domain.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
