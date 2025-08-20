@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlogTalks.Domain\BlogTalks.Domain.csproj" />
+    <ProjectReference Include="..\BlogTalks.EmailSenderApi\BlogTalks.EmailSenderAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

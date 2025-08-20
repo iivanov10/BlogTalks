@@ -1,6 +1,8 @@
 ﻿using BlogTalks.Domain.Repositories;
+using BlogTalks.EmailSenderAPI.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http.Json;
 using System.Security.Claims;
 
 namespace BlogTalks.Application.Comment.Commands
@@ -10,12 +12,16 @@ namespace BlogTalks.Application.Comment.Commands
         private readonly ICommentRepository _commentRepository;
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IUserRepository _userRepository;
 
-        public CreateHandler(ICommentRepository commentRepository, IBlogPostRepository blogPostRepository, IHttpContextAccessor httpContextAccessor)
+        public CreateHandler(ICommentRepository commentRepository, IBlogPostRepository blogPostRepository, IHttpContextAccessor httpContextAccessor, IHttpClientFactory httpClientFactory, IUserRepository userRepository)
         {
             _commentRepository = commentRepository;
             _blogPostRepository = blogPostRepository;
             _httpContextAccessor = httpContextAccessor;
+            _httpClientFactory = httpClientFactory;
+            _userRepository = userRepository;
         }
 
         public async Task<CreateResponse> Handle(CreateRequest request, CancellationToken cancellationToken)
@@ -42,6 +48,20 @@ namespace BlogTalks.Application.Comment.Commands
             };
 
             _commentRepository.Add(comment);
+
+            var httpClient = _httpClientFactory.CreateClient("EmailSenderAPI");
+
+            var blogPostCreator = _userRepository.GetById(blogPost.CreatedBy);
+            var commentCreator = _userRepository.GetById(userIdValue);
+            EmailDTO dto = new EmailDTO()
+            {
+                From = commentCreator.Email,
+                To = blogPostCreator.Email,
+                Subject = "New comment added",
+                Body = $"A new comment has been added to the blog post '{blogPost.Title}' by user {commentCreator.Name}."
+            };
+
+            await httpClient.PostAsJsonAsync("/email", dto, cancellationToken);
 
             return new CreateResponse { Id = comment.Id };
         }

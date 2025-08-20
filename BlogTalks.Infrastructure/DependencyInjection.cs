@@ -33,6 +33,11 @@ namespace BlogTalks.Infrastructure
             services.AddTransient<IAuthService, AuthService>();
 
             services.AddHttpContextAccessor();
+            services.AddHttpClient("EmailSenderAPI", client =>
+            {
+                var config = configuration.GetSection("Services:EmailSenderAPI");
+                client.BaseAddress = new Uri(config["Url"]);
+            });
 
             var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
