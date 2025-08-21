@@ -1,4 +1,4 @@
-﻿namespace BlogTalks.Application.BlogPost.Queries
+﻿namespace BlogTalks.Application.Contracts
 {
     public class Metadata
     {

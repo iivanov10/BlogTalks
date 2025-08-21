@@ -1,4 +1,4 @@
-﻿using BlogTalks.EmailSenderAPI.Models;
+﻿using BlogTalks.EmailSenderAPI.DTO;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;

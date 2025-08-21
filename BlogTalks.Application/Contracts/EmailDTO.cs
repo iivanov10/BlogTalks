@@ -1,4 +1,4 @@
-﻿namespace BlogTalks.EmailSenderAPI.Models
+﻿namespace BlogTalks.Application.Contracts
 {
     public class EmailDTO
     {
