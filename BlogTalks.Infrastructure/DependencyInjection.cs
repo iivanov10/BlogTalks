@@ -46,7 +46,7 @@ namespace BlogTalks.Infrastructure
 
             services.AddFeatureManagement();
 
-            services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMqSettings"));
+            services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMQSettings"));
 
             var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
