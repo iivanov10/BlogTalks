@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Microsoft.FeatureManagement;
+using BlogTalks.Infrastructure.Messaging;
 
 namespace BlogTalks.Infrastructure
 {
@@ -32,12 +34,19 @@ namespace BlogTalks.Infrastructure
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IAuthService, AuthService>();
 
+            services.AddKeyedTransient<IMessagingService, MessagingHttpService>("EmailHttpService");
+            services.AddKeyedTransient<IMessagingService, MessagingRabbitMQService>("EmailRabbitMQService");
+
             services.AddHttpContextAccessor();
             services.AddHttpClient("EmailSenderAPI", client =>
             {
                 var config = configuration.GetSection("Services:EmailSenderAPI");
                 client.BaseAddress = new Uri(config["Url"]);
             });
+
+            services.AddFeatureManagement();
+
+            services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMqSettings"));
 
             var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));

@@ -1,4 +1,4 @@
-using BlogTalks.EmailSenderAPI.Models;
+using BlogTalks.EmailSenderAPI.DTO;
 using BlogTalks.EmailSenderAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
