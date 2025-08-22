@@ -6,6 +6,7 @@ using Microsoft.FeatureManagement;
 using System.Security.Claims;
 using BlogTalks.Application.Abstractions;
 using BlogTalks.Application.Contracts;
+using Microsoft.Extensions.Logging;
 
 namespace BlogTalks.Application.Comment.Commands
 {
@@ -18,6 +19,7 @@ namespace BlogTalks.Application.Comment.Commands
         private readonly IUserRepository _userRepository;
         private readonly IFeatureManager _featureManager;
         private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<CreateHandler> _logger;
 
         public CreateHandler(
             ICommentRepository commentRepository,
@@ -26,7 +28,8 @@ namespace BlogTalks.Application.Comment.Commands
             IHttpClientFactory httpClientFactory,
             IUserRepository userRepository,
             IFeatureManager featureManager,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            ILogger<CreateHandler> logger)
         {
             _commentRepository = commentRepository;
             _blogPostRepository = blogPostRepository;
@@ -35,6 +38,7 @@ namespace BlogTalks.Application.Comment.Commands
             _userRepository = userRepository;
             _featureManager = featureManager;
             _serviceProvider = serviceProvider;
+            _logger = logger;
         }
 
         public async Task<CreateResponse> Handle(CreateRequest request, CancellationToken cancellationToken)
@@ -89,7 +93,7 @@ namespace BlogTalks.Application.Comment.Commands
             }
             else
             {
-                // todo add logger
+                _logger.LogError("No email sender feature flag is enabled. Email will not be sent.");
             }
         }
     }

@@ -1,6 +1,4 @@
-﻿
-
-using BlogTalks.EmailSenderAPI.DTO;
+﻿using BlogTalks.EmailSenderAPI.DTO;
 
 namespace BlogTalks.EmailSenderAPI.Services
 {
